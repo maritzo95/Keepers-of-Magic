@@ -45,3 +45,6 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Binary files should be excluded. Programmers can compile on their own.
+*.bin
