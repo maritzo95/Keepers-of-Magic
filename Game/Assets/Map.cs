@@ -5,22 +5,43 @@ public class Map : MonoBehaviour {
     public GameObject selectedUnit;
     public TileType[] tileType;
     public ClickUnit cc;
+    public Texture2D background;
     int[,] tiles;
 
-    int sizeX = 10;
-    int sizeY = 10;
+    int sizeX = 9;
+    int sizeY = 9;
+    int tileSizeX = 200;
+    int tileSizeY = 200;
     void Start() {
         //Create map tiles
         tiles = new int[sizeX, sizeY];
 
-        /*
-         * for(int x = 0; x < imgWidth; x += tileSizeX){
-         * for(int y = 0; y < imgHeight; x += tileSizeY){
-         * if(Gameobject.GetPixels(x,y).color = Color.RGB(r,g,b)
-         * titles[x/tilesizeX,y/tilesizeY] = (Whatever terrian)
-        */
+
+        for (int x = 100; x < sizeX; x += tileSizeX)
+        {
+
+            for (int y = 100; y < sizeY; y += tileSizeY)
+            {
+
+                if (background.GetPixel(x, y) == new Color(0,255,0))
+                {
+                    tiles[x / tileSizeX, y / tileSizeY] = 0;
+                }
+                if (background.GetPixel(x, y) == new Color(0,0,255))
+                {
+                    tiles[x / tileSizeX, y / tileSizeY] = 1;
+                }
+                if (background.GetPixel(x, y) == new Color(255,0,0))
+                {
+                    tiles[x / tileSizeX, y / tileSizeY] = 2;
+                }
+                Debug.Log(x);
+                Debug.Log(y);
+              
+            }
+        }
         //Initialize map tiles
-        for (int x = 0; x < sizeX; x++)
+       /* for (int x = 0; x < sizeX; x++)
         {
             for (int y = 0; y < sizeY; y++)
             {
@@ -39,7 +60,7 @@ public class Map : MonoBehaviour {
         tiles[2, 3] = 2;
         tiles[3, 2] = 2;
         tiles[3, 3] = 2;
-
+        */
         GenerateMap();
     }
     void GenerateMap() {
