@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class Map : MonoBehaviour {
+    public bool firstPlayerTurn = true;
+    public bool secondPlayerTurn = false;
     public GameObject selectedUnit;
     public TileType[] tileType;
     public ClickUnit cc;
