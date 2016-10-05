@@ -49,3 +49,4 @@ Temporary Items
 # Binary files should be excluded. Programmers can compile on their own.
 *.bin
 *meta*
+*.dll
