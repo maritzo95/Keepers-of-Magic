@@ -7,37 +7,38 @@ public class Map : MonoBehaviour {
     public ClickUnit cc;
     public Texture2D background;
     int[,] tiles;
-
     int sizeX = 9;
     int sizeY = 9;
     int tileSizeX = 200;
     int tileSizeY = 200;
+
     void Start() {
         //Create map tiles
         tiles = new int[sizeX, sizeY];
 
-
-        for (int x = 100; x < sizeX; x += tileSizeX)
+        //Moves tile to tile checking
+        for (int x = 100; x < sizeX * tileSizeX; x += tileSizeX)
         {
 
-            for (int y = 100; y < sizeY; y += tileSizeY)
+            for (int y = 100; y < sizeY *tileSizeY; y += tileSizeY)
             {
-
-                if (background.GetPixel(x, y) == new Color(0,255,0))
+                Debug.Log(background.GetPixel(x, y));
+                //checks if it is green and assigns the grass tile
+                if (background.GetPixel(x, y) == new Color(0,1,0,1))
                 {
-                    tiles[x / tileSizeX, y / tileSizeY] = 0;
+                    tiles[(x-100)/tileSizeX , (y-100)/tileSizeY] = 0;
                 }
-                if (background.GetPixel(x, y) == new Color(0,0,255))
+                //checks if it is blue and assigns the water tile
+                else if (background.GetPixel(x, y) == new Color(0,0,1,1))
                 {
-                    tiles[x / tileSizeX, y / tileSizeY] = 1;
+                    tiles[(x-100)/tileSizeX, (y-100)/tileSizeY] = 1;
                 }
-                if (background.GetPixel(x, y) == new Color(255,0,0))
+                //checks if it is red and assigns the dirt tile
+                else if (background.GetPixel(x, y) == new Color(1,0,0,1))
                 {
-                    tiles[x / tileSizeX, y / tileSizeY] = 2;
+                    tiles[(x-100)/tileSizeX, (y-100)/tileSizeY] = 2;
                 }
-                Debug.Log(x);
-                Debug.Log(y);
-              
+                
             }
         }
         //Initialize map tiles
@@ -64,10 +65,12 @@ public class Map : MonoBehaviour {
         GenerateMap();
     }
     void GenerateMap() {
+        //goes through the grid
         for (int x = 0; x < sizeX; x++)
         {
             for (int y = 0; y < sizeY; y++)
             {
+                //finds the tile type and creates a clone of it in the grid section it is assigned to and gives it an x and y coord.
                 TileType tt = tileType[tiles[x, y]];
                 GameObject go = (GameObject)Instantiate(tt.tileVisual, new Vector3(x, y, 0), Quaternion.identity);
                 ClickTile ct = go.GetComponent<ClickTile>();
@@ -78,9 +81,12 @@ public class Map : MonoBehaviour {
         }
     }
     public void MoveUnitTo(int x, int y) {
+        //checks  to see if it is selected
         if (cc.selected) { 
+            //if the distance is within three tiles horizontally or two diagonally move it
         if (Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= 3)
-            selectedUnit.transform.position = new Vector3(x, y, (float)-0.75);
+                //moves the selected unit. Note the -.75 is for the unit to appear on the grid. It does not move in the z direction
+                selectedUnit.transform.position = new Vector3(x, y, (float)-0.75);
     }
 }
     public void ChangeUnit(GameObject Cu) {
