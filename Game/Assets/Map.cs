@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Map : MonoBehaviour {
     public bool firstPlayerTurn = true;
-    public bool secondPlayerTurn = false;
     public GameObject selectedUnit;
     public TileType[] tileType;
     public ClickUnit cc;
@@ -57,7 +56,6 @@ public class Map : MonoBehaviour {
         tiles[5, 4] = 1;
         tiles[3, 5] = 1;
         tiles[5, 5] = 1;
-
         //dirt
         tiles[2, 2] = 2;
         tiles[2, 3] = 2;
@@ -83,13 +81,16 @@ public class Map : MonoBehaviour {
         }
     }
     public void MoveUnitTo(int x, int y) {
-        //checks  to see if it is selected
-        if (cc.selected) { 
-            //if the distance is within three tiles horizontally or two diagonally move it
-        if (Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= 3)
-                //moves the selected unit. Note the -.75 is for the unit to appear on the grid. It does not move in the z direction
-                selectedUnit.transform.position = new Vector3(x, y, (float)-0.75);
-    }
+     
+            //checks  to see if it is selected
+            if ((cc.selected && firstPlayerTurn && cc.tag.Equals("Player 1")) || (cc.selected && !firstPlayerTurn && cc.tag.Equals("Player 2")))
+            {
+                //if the distance is within three tiles horizontally or two diagonally move it
+                if (Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= 3)
+                    //moves the selected unit. Note the -.75 is for the unit to appear on the grid. It does not move in the z direction
+                    selectedUnit.transform.position = new Vector3(x, y, (float)-0.75);
+            }
+     
 }
     public void ChangeUnit(GameObject Cu) {
         cc = Cu.GetComponent<ClickUnit>();
