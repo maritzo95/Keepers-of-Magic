@@ -8,12 +8,10 @@ public class ButtonClick : MonoBehaviour {
         if (map.firstPlayerTurn)
         {
             map.firstPlayerTurn = false;
-            map.secondPlayerTurn = true;
         }
-        else if (map.secondPlayerTurn)
+        else if (!map.firstPlayerTurn)
         {
             map.firstPlayerTurn = true;
-            map.secondPlayerTurn = false;
         }
     }
 }
