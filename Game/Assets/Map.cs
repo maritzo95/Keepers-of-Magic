@@ -4,10 +4,13 @@ using System.Collections;
 public class Map : MonoBehaviour {
     public bool firstPlayerTurn = true;
     public GameObject selectedUnit;
+    public GameObject TileMove;
     public TileType[] tileType;
     public ClickUnit cc;
     public Texture2D background;
+    public GameObject[] gameObjects; 
     int[,] tiles;
+   // int[,] moveTiles;
     int sizeX = 9;
     int sizeY = 9;
     int tileSizeX = 200;
@@ -42,26 +45,6 @@ public class Map : MonoBehaviour {
                 
             }
         }
-        //Initialize map tiles
-       /* for (int x = 0; x < sizeX; x++)
-        {
-            for (int y = 0; y < sizeY; y++)
-            {
-                tiles[x, y] = 0;
-            }
-        }
-        //mountain
-        tiles[4, 4] = 1;
-        tiles[3, 4] = 1;
-        tiles[5, 4] = 1;
-        tiles[3, 5] = 1;
-        tiles[5, 5] = 1;
-        //dirt
-        tiles[2, 2] = 2;
-        tiles[2, 3] = 2;
-        tiles[3, 2] = 2;
-        tiles[3, 3] = 2;
-        */
         GenerateMap();
     }
     void GenerateMap() {
@@ -89,26 +72,62 @@ public class Map : MonoBehaviour {
                 if (Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= 3)
                     //moves the selected unit. Note the -.75 is for the unit to appear on the grid. It does not move in the z direction
                     selectedUnit.transform.position = new Vector3(x, y, (float)-0.75);
+            DestroyTiles();
             }
+
      
 }
     public void ChangeUnit(GameObject Cu) {
         cc = Cu.GetComponent<ClickUnit>();
         cc.map = this;
         selectedUnit = Cu;
-        if (selectedUnit.GetComponent<Renderer>().material.color != Color.blue)
+        if (cc.selected)
         {
-            selectedUnit.GetComponent<Renderer>().material.color = Color.blue;
-            cc.selected = true;
-        }
-        else {
-            selectedUnit.GetComponent<Renderer>().material.color = Color.black;
+            DestroyTiles();
             cc.selected = false;
+        }
+        else
+        {
+            CreateTile();
+            cc.selected = true;
         }
     }
     public double Distance(int x1, int y1, int x2, int y2) {
         double dis = 0;
         dis = Mathf.Sqrt(((x1 - x2) * (x1 - x2)) + ((y1 - y2)* (y1 - y2)));
         return dis;
+    }
+    public void DestroyTiles() {
+        gameObjects = GameObject.FindGameObjectsWithTag("Move");
+
+        for (int i = 0; i < gameObjects.Length; i++)
+        {
+            Destroy(gameObjects[i]);
+        }
+    }
+    public void CreateTile() {
+        for (int x = 0; x < sizeX; x++)
+        {
+            for (int y = 0; y < sizeY; y++)
+            {
+                if (Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= 3 && Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) > 0)
+                {
+                    //Debug.Log("X =" + x + "Y=" + y);
+                    GameObject go = (GameObject) Instantiate(TileMove, new Vector3(x, y, (float)-.5), Quaternion.identity);
+                    ClickTile ct = go.GetComponent<ClickTile>();
+                    ct.tileX = x;
+                    ct.tileY = y;
+                    ct.map = this;
+                }
+            }            
+        }
+    /* for (int x = 0; x < moveTiles.Length; x++) {
+            for (int y = 0; y < moveTiles.Length; y++)
+            {
+                if (moveTiles[x, y] == 1)
+                    Instantiate(TileMove, new Vector3(x, y, (float)-.5), Quaternion.identity); 
+            }
+        }
+     */
     }
 }
