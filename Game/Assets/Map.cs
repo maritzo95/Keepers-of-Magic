@@ -88,8 +88,9 @@ public class Map : MonoBehaviour {
         }
         else
         {
-            CreateTile();
             cc.selected = true;
+            DestroyTiles();
+            CreateTile();
         }
     }
     public double Distance(int x1, int y1, int x2, int y2) {
@@ -106,20 +107,24 @@ public class Map : MonoBehaviour {
         }
     }
     public void CreateTile() {
-        for (int x = 0; x < sizeX; x++)
+        if ((cc.selected && firstPlayerTurn && cc.tag.Equals("Player 1")) || (cc.selected && !firstPlayerTurn && cc.tag.Equals("Player 2")))
         {
-            for (int y = 0; y < sizeY; y++)
+            for (int x = 0; x < sizeX; x++)
             {
-                if (Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= 3 && Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) > 0)
+                for (int y = 0; y < sizeY; y++)
                 {
-                    //Debug.Log("X =" + x + "Y=" + y);
-                    GameObject go = (GameObject) Instantiate(TileMove, new Vector3(x, y, (float)-.5), Quaternion.identity);
-                    ClickTile ct = go.GetComponent<ClickTile>();
-                    ct.tileX = x;
-                    ct.tileY = y;
-                    ct.map = this;
+                    if (Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= 3 && Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) > 0)
+                    {
+                        //Debug.Log("X =" + x + "Y=" + y);
+                        GameObject go = (GameObject)Instantiate(TileMove, new Vector3(x, y, (float)-.5), Quaternion.identity);
+                        ClickTile ct = go.GetComponent<ClickTile>();
+                        ct.tileX = x;
+                        ct.tileY = y;
+                        ct.map = this;
+
+                    }
                 }
-            }            
+            }
         }
     /* for (int x = 0; x < moveTiles.Length; x++) {
             for (int y = 0; y < moveTiles.Length; y++)

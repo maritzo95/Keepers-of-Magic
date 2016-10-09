@@ -48,5 +48,14 @@ Temporary Items
 
 # Binary files should be excluded. Programmers can compile on their own.
 *.bin
+
+#Unity generates and changes a lot of files that will fix themselves automatically when the project is loaded up, and so we do not need to commit or pull them.
 *meta*
+*.meta
 *.dll
+*.csproj
+*.sin
+*.sln
+*.dwlt
+Game/Temp/UnityLockFile
+Game/Library/assetDatabase3

@@ -13,5 +13,6 @@ public class ButtonClick : MonoBehaviour {
         {
             map.firstPlayerTurn = true;
         }
+        map.DestroyTiles();
     }
 }
