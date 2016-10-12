@@ -45,9 +45,9 @@ public class Map : MonoBehaviour {
                 
             }
         }
-        GenerateMap();
+        generateMap();
     }
-    void GenerateMap() {
+    void generateMap() {
         //goes through the grid
         for (int x = 0; x < sizeX; x++)
         {
@@ -83,8 +83,8 @@ public class Map : MonoBehaviour {
         selectedUnit = Cu;
         if (cc.selected)
         {
-            DestroyTiles();
             cc.selected = false;
+            DestroyTiles();
         }
         else
         {
@@ -106,7 +106,7 @@ public class Map : MonoBehaviour {
             Destroy(gameObjects[i]);
         }
     }
-    public void CreateTile() {
+    public void CreateTile() {//change so one doesnt spawn on other objects.
         if ((cc.selected && firstPlayerTurn && cc.tag.Equals("Player 1")) || (cc.selected && !firstPlayerTurn && cc.tag.Equals("Player 2")))
         {
             for (int x = 0; x < sizeX; x++)
