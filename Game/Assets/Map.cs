@@ -18,9 +18,7 @@ public class Map : MonoBehaviour {
     int sizeY = 9;
     int tileSizeX = 200;
     int tileSizeY = 200;
-    //int player1Morale, player2Morale;
-    //int player1MaxMorale = 200;
-    //int player2MaxMorale = 200;
+    int player1Morale = 100, player2Morale = 100;
 
     void Start() {
         //Create map tiles
@@ -123,7 +121,7 @@ public class Map : MonoBehaviour {
             {
                 for (int y = 0; y < sizeY; y++)
                 {
-                    if (Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= cc.maxMoveDistance && Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) > 0)
+                    if (Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= cc.maxMoveDistance && Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) > 0 && tileOpen(clickTiles[x,y]))
                     {
                         //Debug.Log("X =" + x + "Y=" + y);
                         GameObject go = (GameObject)Instantiate(TileMove, new Vector3(x, y, (float)-.5), Quaternion.identity);
@@ -145,9 +143,20 @@ public class Map : MonoBehaviour {
         }
      */
     }
-    //public void moraleChange() {
-     
-   // }
+    public void moraleChange(ClickUnit cu) {
+        if (cu.tag.Equals("Player1")) {
+            player1Morale -= cu.morale;
+        }
+        if (cu.tag.Equals("Player2"))
+        {
+            player2Morale -= cu.morale;
+        }
+    }
+    public bool tileOpen(ClickTile ct) {
+        bool open = true;
+        // search through player units then if x and y are same then not clickable.
+        return open;
+    }
 
 	public ClickTile getTileOnMap(int x, int y)
 	{
