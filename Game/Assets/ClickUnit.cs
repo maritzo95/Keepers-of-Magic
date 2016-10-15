@@ -7,6 +7,7 @@ public class ClickUnit : MonoBehaviour
     public GameObject player;
     public Map map;
     public int health;
+    public int morale;
 	public double maxMoveDistance;
     void OnMouseUp() 
 	{
