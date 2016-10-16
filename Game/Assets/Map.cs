@@ -9,6 +9,7 @@ public class Map : MonoBehaviour {
     public ClickUnit cc;
     public Texture2D background;
     public GameObject[] gameObjects; 
+	private ClickTile[,] clickTiles;
     int[,] tiles;
    // int[,] moveTiles;
     int sizeX = 9;
@@ -19,6 +20,7 @@ public class Map : MonoBehaviour {
     void Start() {
         //Create map tiles
         tiles = new int[sizeX, sizeY];
+		clickTiles = new ClickTile[sizeX, sizeY];
 
         //Moves tile to tile checking
         for (int x = 100; x < sizeX * tileSizeX; x += tileSizeX)
@@ -48,6 +50,7 @@ public class Map : MonoBehaviour {
         generateMap();
     }
     void generateMap() {
+		clickTiles = new ClickTile[sizeX,sizeY];
         //goes through the grid
         for (int x = 0; x < sizeX; x++)
         {
@@ -60,6 +63,7 @@ public class Map : MonoBehaviour {
                 ct.tileX = x;
                 ct.tileY = y;
                 ct.map = this;
+				clickTiles [x,y] = ct;
             }
         }
     }
@@ -135,4 +139,24 @@ public class Map : MonoBehaviour {
         }
      */
     }
+
+	public ClickTile getTileOnMap(int x, int y)
+	{
+		return clickTiles [x, y];
+	}
+
+	public ClickTile[,] getClickTiles()
+	{
+		return clickTiles;
+	}
+
+	public int getSizeX()
+	{
+		return sizeX;
+	}
+
+	public int getSizeY()
+	{
+		return sizeY;
+	}
 }
