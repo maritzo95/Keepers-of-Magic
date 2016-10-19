@@ -66,11 +66,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\ButtonClick.cs" />
-    <Compile Include="Assets\ClickTile.cs" />
-    <Compile Include="Assets\ClickUnit.cs" />
-    <Compile Include="Assets\Map.cs" />
-    <Compile Include="Assets\TileType.cs" />
+    <Compile Include="Assets\Scripts\ButtonClick.cs" />
+    <Compile Include="Assets\Scripts\ClickTile.cs" />
+    <Compile Include="Assets\Scripts\ClickUnit.cs" />
+    <Compile Include="Assets\Scripts\Map.cs" />
+    <Compile Include="Assets\Scripts\TileType.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Writing\Reminder.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

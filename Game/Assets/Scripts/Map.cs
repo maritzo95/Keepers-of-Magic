@@ -5,20 +5,27 @@ public class Map : MonoBehaviour {
     public bool firstPlayerTurn = true;
     public GameObject selectedUnit;
     public GameObject TileMove;
+    public GameObject TileAttack;
     public TileType[] tileType;
     public ClickUnit cc;
     public Texture2D background;
-    public GameObject[] gameObjects; 
+    public GameObject[] moveTiles;
+    public GameObject[] attackTiles; 
+  	private ClickTile[,] clickTiles;
+    public GameObject[] player1Units;
+    public GameObject[] player2Units;
     int[,] tiles;
    // int[,] moveTiles;
     int sizeX = 9;
     int sizeY = 9;
     int tileSizeX = 200;
     int tileSizeY = 200;
+    int player1Morale = 100, player2Morale = 100;
 
     void Start() {
         //Create map tiles
         tiles = new int[sizeX, sizeY];
+		clickTiles = new ClickTile[sizeX, sizeY];
 
         //Moves tile to tile checking
         for (int x = 100; x < sizeX * tileSizeX; x += tileSizeX)
@@ -45,9 +52,11 @@ public class Map : MonoBehaviour {
                 
             }
         }
-        GenerateMap();
+        generateMap();
+        generatePlayers();
     }
-    void GenerateMap() {
+    void generateMap() {
+		clickTiles = new ClickTile[sizeX,sizeY];
         //goes through the grid
         for (int x = 0; x < sizeX; x++)
         {
@@ -60,8 +69,13 @@ public class Map : MonoBehaviour {
                 ct.tileX = x;
                 ct.tileY = y;
                 ct.map = this;
+				clickTiles [x,y] = ct;
             }
         }
+    }
+    public void generatePlayers() {
+        player1Units = GameObject.FindGameObjectsWithTag("Player 1");
+        player2Units = GameObject.FindGameObjectsWithTag("Player 2");
     }
     public void MoveUnitTo(int x, int y) {
      
@@ -73,6 +87,7 @@ public class Map : MonoBehaviour {
                     //moves the selected unit. Note the -.75 is for the unit to appear on the grid. It does not move in the z direction
                     selectedUnit.transform.position = new Vector3(x, y, (float)-0.75);
             DestroyTiles();
+            cc.selected = false;
             }
 
      
@@ -83,8 +98,8 @@ public class Map : MonoBehaviour {
         selectedUnit = Cu;
         if (cc.selected)
         {
-            DestroyTiles();
             cc.selected = false;
+            DestroyTiles();
         }
         else
         {
@@ -99,24 +114,39 @@ public class Map : MonoBehaviour {
         return dis;
     }
     public void DestroyTiles() {
-        gameObjects = GameObject.FindGameObjectsWithTag("Move");
-
-        for (int i = 0; i < gameObjects.Length; i++)
+        moveTiles = GameObject.FindGameObjectsWithTag("Move");
+        attackTiles = GameObject.FindGameObjectsWithTag("Attack");
+        for (int i = 0; i < moveTiles.Length; i++)
         {
-            Destroy(gameObjects[i]);
+            Destroy(moveTiles[i]);
+        }
+
+        for (int i = 0; i < attackTiles.Length; i++)
+        {
+            Destroy(attackTiles[i]);
         }
     }
-    public void CreateTile() {
+    public void CreateTile() {//change so one doesnt spawn on other objects.
         if ((cc.selected && firstPlayerTurn && cc.tag.Equals("Player 1")) || (cc.selected && !firstPlayerTurn && cc.tag.Equals("Player 2")))
         {
             for (int x = 0; x < sizeX; x++)
             {
                 for (int y = 0; y < sizeY; y++)
                 {
-                    if (Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= 3 && Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) > 0)
+                    if (Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= cc.maxMoveDistance && Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) > 0 && tileOpen(clickTiles[x,y]))
                     {
                         //Debug.Log("X =" + x + "Y=" + y);
                         GameObject go = (GameObject)Instantiate(TileMove, new Vector3(x, y, (float)-.5), Quaternion.identity);
+                        ClickTile ct = go.GetComponent<ClickTile>();
+                        ct.tileX = x;
+                        ct.tileY = y;
+                        ct.map = this;
+
+                    }
+                    if (Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= cc.attackRange && Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) > 0 && checkEnemy(clickTiles[x, y]))
+                    {
+                        //Debug.Log("X =" + x + "Y=" + y);
+                        GameObject go = (GameObject)Instantiate(TileAttack, new Vector3(x, y, (float)-.5), Quaternion.identity);
                         ClickTile ct = go.GetComponent<ClickTile>();
                         ct.tileX = x;
                         ct.tileY = y;
@@ -135,4 +165,79 @@ public class Map : MonoBehaviour {
         }
      */
     }
+    public void moraleChange(ClickUnit cu) {
+        if (cu.tag.Equals("Player1")) {
+            player1Morale -= cu.morale;
+        }
+        if (cu.tag.Equals("Player2"))
+        {
+            player2Morale -= cu.morale;
+        }
+    }
+    public bool tileOpen(ClickTile ct) {
+        bool open = true;
+        // search through player units then if x and y are same then not clickable.'
+        for (int i = 0; i < player1Units.Length; i++)
+        {
+            if (player1Units[i].transform.position.x == ct.transform.position.x && player1Units[i].transform.position.y == ct.transform.position.y)
+            {
+                open = false;
+            }
+        }
+        for (int i = 0; i < player2Units.Length; i++) {
+
+            if (player2Units[i].transform.position.x == ct.transform.position.x && player2Units[i].transform.position.y == ct.transform.position.y)
+            {
+                open = false;
+            }
+        }
+        
+        return open;
+    }
+    public bool checkEnemy(ClickTile ct) {
+        bool ret = false;
+        bool turn = firstPlayerTurn;
+        if (turn) {
+            for (int i = 0; i < player2Units.Length; i++)
+            {
+
+                if (player2Units[i].transform.position.x == ct.transform.position.x && player2Units[i].transform.position.y == ct.transform.position.y)
+                {
+                    ret = true;
+                }
+            }
+        }
+
+        else {
+            for (int i = 0; i < player1Units.Length; i++)
+            {
+                if (player1Units[i].transform.position.x == ct.transform.position.x && player1Units[i].transform.position.y == ct.transform.position.y)
+                {
+                    ret = true;
+                }
+            }
+        }
+        
+        return ret;
+    }
+
+	public ClickTile getTileOnMap(int x, int y)
+	{
+		return clickTiles [x, y];
+	}
+
+	public ClickTile[,] getClickTiles()
+	{
+		return clickTiles;
+	}
+
+	public int getSizeX()
+	{
+		return sizeX;
+	}
+
+	public int getSizeY()
+	{
+		return sizeY;
+	}
 }
