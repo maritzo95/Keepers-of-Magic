@@ -9,9 +9,9 @@ public class Map : MonoBehaviour {
     public ClickUnit cc;
     public Texture2D background;
     public GameObject[] gameObjects; 
-	private ClickTile[,] clickTiles;
-  //  public GameObject[] player1Units;
-    //public GameObject[] player2Units;
+  	private ClickTile[,] clickTiles;
+    public GameObject[] player1Units;
+    public GameObject[] player2Units;
     int[,] tiles;
    // int[,] moveTiles;
     int sizeX = 9;
@@ -51,6 +51,7 @@ public class Map : MonoBehaviour {
             }
         }
         generateMap();
+        generatePlayers();
     }
     void generateMap() {
 		clickTiles = new ClickTile[sizeX,sizeY];
@@ -69,6 +70,10 @@ public class Map : MonoBehaviour {
 				clickTiles [x,y] = ct;
             }
         }
+    }
+    public void generatePlayers() {
+        player1Units = GameObject.FindGameObjectsWithTag("Player 1");
+        player2Units = GameObject.FindGameObjectsWithTag("Player 2");
     }
     public void MoveUnitTo(int x, int y) {
      
@@ -154,7 +159,18 @@ public class Map : MonoBehaviour {
     }
     public bool tileOpen(ClickTile ct) {
         bool open = true;
-        // search through player units then if x and y are same then not clickable.
+        // search through player units then if x and y are same then not clickable.'
+        for (int i = 0; i < player1Units.Length; i++)
+        {
+            if (player1Units[i].transform.position.x == ct.transform.position.x && player1Units[i].transform.position.y == ct.transform.position.y)
+            {
+                open = false;
+            }
+            if (player2Units[i].transform.position.x == ct.transform.position.x && player2Units[i].transform.position.y == ct.transform.position.y)
+            {
+                open = false;
+            }
+        }
         return open;
     }
 
