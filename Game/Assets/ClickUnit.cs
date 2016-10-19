@@ -9,6 +9,7 @@ public class ClickUnit : MonoBehaviour
     public int health;
     public int morale;
 	public double maxMoveDistance;
+    public double attackRange;
     void OnMouseUp() 
 	{
         map.ChangeUnit(player);

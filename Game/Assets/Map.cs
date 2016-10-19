@@ -5,10 +5,12 @@ public class Map : MonoBehaviour {
     public bool firstPlayerTurn = true;
     public GameObject selectedUnit;
     public GameObject TileMove;
+    public GameObject TileAttack;
     public TileType[] tileType;
     public ClickUnit cc;
     public Texture2D background;
-    public GameObject[] gameObjects; 
+    public GameObject[] moveTiles;
+    public GameObject[] attackTiles; 
   	private ClickTile[,] clickTiles;
     public GameObject[] player1Units;
     public GameObject[] player2Units;
@@ -112,11 +114,16 @@ public class Map : MonoBehaviour {
         return dis;
     }
     public void DestroyTiles() {
-        gameObjects = GameObject.FindGameObjectsWithTag("Move");
-
-        for (int i = 0; i < gameObjects.Length; i++)
+        moveTiles = GameObject.FindGameObjectsWithTag("Move");
+        attackTiles = GameObject.FindGameObjectsWithTag("Attack");
+        for (int i = 0; i < moveTiles.Length; i++)
         {
-            Destroy(gameObjects[i]);
+            Destroy(moveTiles[i]);
+        }
+
+        for (int i = 0; i < attackTiles.Length; i++)
+        {
+            Destroy(attackTiles[i]);
         }
     }
     public void CreateTile() {//change so one doesnt spawn on other objects.
@@ -130,6 +137,16 @@ public class Map : MonoBehaviour {
                     {
                         //Debug.Log("X =" + x + "Y=" + y);
                         GameObject go = (GameObject)Instantiate(TileMove, new Vector3(x, y, (float)-.5), Quaternion.identity);
+                        ClickTile ct = go.GetComponent<ClickTile>();
+                        ct.tileX = x;
+                        ct.tileY = y;
+                        ct.map = this;
+
+                    }
+                    if (Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= cc.attackRange && Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) > 0 && checkEnemy(clickTiles[x, y]))
+                    {
+                        //Debug.Log("X =" + x + "Y=" + y);
+                        GameObject go = (GameObject)Instantiate(TileAttack, new Vector3(x, y, (float)-.5), Quaternion.identity);
                         ClickTile ct = go.GetComponent<ClickTile>();
                         ct.tileX = x;
                         ct.tileY = y;
@@ -166,12 +183,42 @@ public class Map : MonoBehaviour {
             {
                 open = false;
             }
+        }
+        for (int i = 0; i < player2Units.Length; i++) {
+
             if (player2Units[i].transform.position.x == ct.transform.position.x && player2Units[i].transform.position.y == ct.transform.position.y)
             {
                 open = false;
             }
         }
+        
         return open;
+    }
+    public bool checkEnemy(ClickTile ct) {
+        bool ret = false;
+        bool turn = firstPlayerTurn;
+        if (turn) {
+            for (int i = 0; i < player2Units.Length; i++)
+            {
+
+                if (player2Units[i].transform.position.x == ct.transform.position.x && player2Units[i].transform.position.y == ct.transform.position.y)
+                {
+                    ret = true;
+                }
+            }
+        }
+
+        else {
+            for (int i = 0; i < player1Units.Length; i++)
+            {
+                if (player1Units[i].transform.position.x == ct.transform.position.x && player1Units[i].transform.position.y == ct.transform.position.y)
+                {
+                    ret = true;
+                }
+            }
+        }
+        
+        return ret;
     }
 
 	public ClickTile getTileOnMap(int x, int y)
