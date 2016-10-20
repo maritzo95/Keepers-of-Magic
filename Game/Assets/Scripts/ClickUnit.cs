@@ -24,7 +24,7 @@ public class ClickUnit : MonoBehaviour
 				//within move distance
 				if ((double)map.Distance((int)this.transform.position.x, (int)this.transform.position.y, (int)t.transform.position.x, (int)t.transform.position.y) < maxMoveDistance) 
 				{
-					t.Tile.tag = "Move";
+				//	t.Tile.tag = "Move";
 				}
 			}
 		}
