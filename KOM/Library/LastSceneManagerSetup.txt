@@ -1,0 +1,4 @@
+sceneSetups:
+- path: C:/Users/Paul/Desktop/Keepers-of-Magic/Game/Assets/hey.unity
+  isLoaded: 1
+  isActive: 1

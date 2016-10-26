@@ -14,6 +14,7 @@ public class Map : MonoBehaviour {
   	private ClickTile[,] clickTiles;
     public GameObject[] player1Units;
     public GameObject[] player2Units;
+    public bool moveMode = true;
     int[,] tiles;
    // int[,] moveTiles;
     int sizeX = 9;

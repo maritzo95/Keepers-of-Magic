@@ -45,6 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\AttackButtonClick.cs" />
      <Compile Include="Assets\Scripts\ButtonClick.cs" />
      <Compile Include="Assets\Scripts\ClickTile.cs" />
      <Compile Include="Assets\Scripts\ClickUnit.cs" />
