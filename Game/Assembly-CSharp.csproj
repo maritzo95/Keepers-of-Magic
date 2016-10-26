@@ -50,6 +50,7 @@
      <Compile Include="Assets\Scripts\ClickTile.cs" />
      <Compile Include="Assets\Scripts\ClickUnit.cs" />
      <Compile Include="Assets\Scripts\Map.cs" />
+     <Compile Include="Assets\Scripts\MoveButtonClick.cs" />
      <Compile Include="Assets\Scripts\TileType.cs" />
      <None Include="Assets\Writing\Reminder.txt" />
  <Reference Include="UnityEngine.UI">
