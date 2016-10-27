@@ -45,11 +45,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\ButtonClick.cs" />
-     <Compile Include="Assets\ClickTile.cs" />
-     <Compile Include="Assets\ClickUnit.cs" />
-     <Compile Include="Assets\Map.cs" />
-     <Compile Include="Assets\TileType.cs" />
+     <Compile Include="Assets\Scripts\ButtonClick.cs" />
+     <Compile Include="Assets\Scripts\ClickTile.cs" />
+     <Compile Include="Assets\Scripts\ClickUnit.cs" />
+     <Compile Include="Assets\Scripts\Map.cs" />
+     <Compile Include="Assets\Scripts\TileType.cs" />
+     <None Include="Assets\Writing\Reminder.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
