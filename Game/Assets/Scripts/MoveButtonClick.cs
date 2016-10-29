@@ -7,6 +7,6 @@ public class MoveButtonClick : MonoBehaviour
 
     public void Click()
     {
-
+        map.moveMode = true;
     }
 }
