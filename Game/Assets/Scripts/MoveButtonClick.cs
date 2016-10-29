@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AttackButtonClick : MonoBehaviour
+public class MoveButtonClick : MonoBehaviour
 {
     public Map map;
 
