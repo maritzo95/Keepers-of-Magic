@@ -53,6 +53,7 @@
      <Compile Include="Assets\Scripts\MoveButtonClick.cs" />
      <Compile Include="Assets\Scripts\TileType.cs" />
      <None Include="Assets\Writing\Reminder.txt" />
+     <None Include="Assets\read me.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
