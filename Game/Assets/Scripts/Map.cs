@@ -14,10 +14,11 @@ public class Map : MonoBehaviour {
   	private ClickTile[,] clickTiles;
     public GameObject[] player1Units;
     public GameObject[] player2Units;
+    public bool moveMode = true;
     int[,] tiles;
    // int[,] moveTiles;
-    int sizeX = 9;
-    int sizeY = 9;
+    int sizeX = 18; //Manually change for map
+    int sizeY = 18;
     int tileSizeX = 200;
     int tileSizeY = 200;
     int player1Morale = 100, player2Morale = 100;

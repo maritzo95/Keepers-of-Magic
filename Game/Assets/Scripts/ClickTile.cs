@@ -8,12 +8,16 @@ public class ClickTile : MonoBehaviour {
     public GameObject Tile;
     
     void OnMouseUp() {
-        if (Tile.tag.Equals("Move"))
+        if (!Tile.Equals(null))
         {
-            map.MoveUnitTo(tileX, tileY);
-        }
-        if (Tile.tag.Equals("Attack")) {
-            //Attack function.
+            if (Tile.tag.Equals("Move"))
+            {
+                map.MoveUnitTo(tileX, tileY);
+            }
+            if (Tile.tag.Equals("Attack"))
+            {
+                //Attack function.
+            }
         }
     }
 }
