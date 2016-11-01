@@ -53,7 +53,10 @@
      <Compile Include="Assets\Scripts\MoveButtonClick.cs" />
      <Compile Include="Assets\Scripts\TileType.cs" />
      <None Include="Assets\Writing\Reminder.txt" />
+<<<<<<< HEAD
      <None Include="Assets\read me.txt" />
+=======
+>>>>>>> master
  <Reference Include="UnityEngine.Networking">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
