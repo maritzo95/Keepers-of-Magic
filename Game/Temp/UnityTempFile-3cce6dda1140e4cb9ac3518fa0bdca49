@@ -84,10 +84,12 @@
 -define:UNITY_EDITOR_64
 -define:UNITY_EDITOR_OSX
 -define:UNITY_TEAM_LICENSE
+'Assets/Scripts/AttackButtonClick.cs'
 'Assets/Scripts/ButtonClick.cs'
 'Assets/Scripts/ClickTile.cs'
 'Assets/Scripts/ClickUnit.cs'
 'Assets/Scripts/Map.cs'
+'Assets/Scripts/MoveButtonClick.cs'
 'Assets/Scripts/TileType.cs'
 -r:'/Applications/Unity/Unity.app/Contents/Mono/lib/mono/unity/System.Runtime.Serialization.dll'
 -r:'/Applications/Unity/Unity.app/Contents/Mono/lib/mono/unity/System.Xml.Linq.dll'
