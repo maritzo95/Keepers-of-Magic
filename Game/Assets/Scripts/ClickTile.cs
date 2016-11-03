@@ -6,7 +6,15 @@ public class ClickTile : MonoBehaviour {
     public int tileY;
     public Map map;
     public GameObject Tile;
-    
+	public Transform trans;
+	public Material terrain;
+
+	void Start()
+	{
+		trans = this.GetComponent<Transform> ();
+		terrain = (this.GetComponent<MeshRenderer> ()).material;
+	}
+
     void OnMouseUp() {
         if (!Tile.Equals(null))
         {
@@ -20,5 +28,6 @@ public class ClickTile : MonoBehaviour {
             }
         }
     }
+
 }
 

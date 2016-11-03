@@ -22,6 +22,7 @@ public class Map : MonoBehaviour {
     int tileSizeX = 200;
     int tileSizeY = 200;
     int player1Morale = 100, player2Morale = 100;
+	Vector2 origin;
 
     void Start() {
         //Create map tiles
@@ -55,6 +56,7 @@ public class Map : MonoBehaviour {
         }
         generateMap();
         generatePlayers();
+		origin.Set (clickTiles[0,0].transform.position.x,clickTiles[0,0].transform.position.y);
     }
     void generateMap() {
 		clickTiles = new ClickTile[sizeX,sizeY];
@@ -134,26 +136,28 @@ public class Map : MonoBehaviour {
             {
                 for (int y = 0; y < sizeY; y++)
                 {
-                    if (Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= cc.maxMoveDistance && Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) > 0 && tileOpen(clickTiles[x,y]))
-                    {
-                        //Debug.Log("X =" + x + "Y=" + y);
-                        GameObject go = (GameObject)Instantiate(TileMove, new Vector3(x, y, (float)-.5), Quaternion.identity);
-                        ClickTile ct = go.GetComponent<ClickTile>();
-                        ct.tileX = x;
-                        ct.tileY = y;
-                        ct.map = this;
+					foreach (ClickUnit.PotentialMove p in cc.getPossibleMoves()) 
+					{
+						if (p.t.Equals(this.getTileFromVector(new Vector2(x,y))))
+						{
+							//Debug.Log("X =" + x + "Y=" + y);
+							GameObject go = (GameObject)Instantiate (TileMove, new Vector3 (x, y, (float)-.5), Quaternion.identity);
+							ClickTile ct = go.GetComponent<ClickTile> ();
+							ct.tileX = x;
+							ct.tileY = y;
+							ct.map = this;
 
-                    }
-                    if (Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= cc.attackRange && Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) > 0 && checkEnemy(clickTiles[x, y]))
-                    {
-                        //Debug.Log("X =" + x + "Y=" + y);
-                        GameObject go = (GameObject)Instantiate(TileAttack, new Vector3(x, y, (float)-.5), Quaternion.identity);
-                        ClickTile ct = go.GetComponent<ClickTile>();
-                        ct.tileX = x;
-                        ct.tileY = y;
-                        ct.map = this;
+						}
+					}
+						if (Distance ((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= cc.attackRange && Distance ((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) > 0 && checkEnemy (clickTiles [x, y])) {
+							//Debug.Log("X =" + x + "Y=" + y);
+							GameObject go = (GameObject)Instantiate (TileAttack, new Vector3 (x, y, (float)-.5), Quaternion.identity);
+							ClickTile ct = go.GetComponent<ClickTile> ();
+							ct.tileX = x;
+							ct.tileY = y;
+							ct.map = this;
 
-                    }
+						}
                 }
             }
         }
@@ -241,4 +245,30 @@ public class Map : MonoBehaviour {
 	{
 		return sizeY;
 	}
+
+	public Vector2 GetPositionFromTransform(Transform t)
+	{
+		Vector2 tile = new Vector2();
+		tile.x = (int)((t.position.x - origin.x) * POSITION_GRID_RATIO);
+		tile.y = (int)((t.position.y - origin.y) * POSITION_GRID_RATIO);
+		print (t.position.x);
+		return tile;
+	}
+
+	public ClickTile getTileFromVector(Vector2 v)
+	{
+		return clickTiles [(int)v.x, (int)v.y].GetComponent<ClickTile>();
+	}
+		
+
+	public bool isOnBoard(Vector2 v)
+	{
+		if (v.x >= 0 && v.x < sizeX && v.y >= 0 && v.y < sizeY) 
+		{
+			return true;
+		}
+		return false;
+	}
+
+	const float POSITION_GRID_RATIO = 1.0f;
 }
