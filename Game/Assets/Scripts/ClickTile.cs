@@ -23,11 +23,11 @@ public class ClickTile : MonoBehaviour {
             if (Tile.tag.Equals("Move"))
             {
 				map.MoveUnitTo(tileX, tileY);
-				map.cc.movesLeft -= movesTo;
+				map.selectedPlayer.movesLeft -= movesTo;
             }
             if (Tile.tag.Equals("Attack"))
             {
-                //Attack function.
+                map.attackObject(tileX, tileY);
             }
         }
     }

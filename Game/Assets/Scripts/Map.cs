@@ -7,7 +7,8 @@ public class Map : MonoBehaviour {
     public GameObject TileMove;
     public GameObject TileAttack;
     public TileType[] tileType;
-    public ClickUnit cc;
+    public ClickUnit selectedPlayer;
+    public ClickUnit attackedPlayer;
     public Texture2D background;
     public GameObject[] moveTiles;
     public GameObject[] attackTiles; 
@@ -81,43 +82,43 @@ public class Map : MonoBehaviour {
         player2Units = GameObject.FindGameObjectsWithTag("Player 2");
     }
     public void MoveUnitTo(int x, int y) {
-     
 
+        if (moveMode)
+        {
             //checks  to see if it is selected
-            if ((cc.selected && firstPlayerTurn && cc.tag.Equals("Player 1")) || (cc.selected && !firstPlayerTurn && cc.tag.Equals("Player 2")))
+            if ((selectedPlayer.selected && firstPlayerTurn && selectedPlayer.tag.Equals("Player 1")) || (selectedPlayer.selected && !firstPlayerTurn && selectedPlayer.tag.Equals("Player 2")))
             {
                 //if the distance is within three tiles horizontally or two diagonally move it
                 if (Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= 3)
-				{
+                {
                     //moves the selected unit. Note the -.75 is for the unit to appear on the grid. It does not move in the z direction
                     selectedUnit.transform.position = new Vector3(x, y, (float)-0.75);
-					Vector2 v = new Vector2 (x, y);
-					ClickTile cT = this.getTileFromVector (v);
-					if (cc.currentTile != null) 
-					{
-						cc.currentTile.containedUnit = null;
-					}
-					cc.currentTile = cT;
-					cT.containedUnit = cc;
-				}
-            DestroyTiles();
-            cc.selected = false;
+                    Vector2 v = new Vector2(x, y);
+                    ClickTile cT = this.getTileFromVector(v);
+                    if (selectedPlayer.currentTile != null)
+                    {
+                        selectedPlayer.currentTile.containedUnit = null;
+                    }
+                    selectedPlayer.currentTile = cT;
+                    cT.containedUnit = selectedPlayer;
+                }
+                DestroyTiles();
+                selectedPlayer.selected = false;
             }
-
-     
+        }
 }
     public void ChangeUnit(GameObject Cu) {
-        cc = Cu.GetComponent<ClickUnit>();
-        cc.map = this;
+        selectedPlayer = Cu.GetComponent<ClickUnit>();
+        selectedPlayer.map = this;
         selectedUnit = Cu;
-        if (cc.selected)
+        if (selectedPlayer.selected)
         {
-            cc.selected = false;
+            selectedPlayer.selected = false;
             DestroyTiles();
         }
         else
         {
-            cc.selected = true;
+            selectedPlayer.selected = true;
             DestroyTiles();
             CreateTile();
         }
@@ -141,15 +142,15 @@ public class Map : MonoBehaviour {
         }
     }
     public void CreateTile() {//change so one doesnt spawn on other objects.
-        if ((cc.selected && firstPlayerTurn && cc.tag.Equals("Player 1")) || (cc.selected && !firstPlayerTurn && cc.tag.Equals("Player 2")))
+        if ((selectedPlayer.selected && firstPlayerTurn && selectedPlayer.tag.Equals("Player 1")) || (selectedPlayer.selected && !firstPlayerTurn && selectedPlayer.tag.Equals("Player 2")))
         {
             for (int x = 0; x < sizeX; x++)
             {
                 for (int y = 0; y < sizeY; y++)
                 {
-					foreach (ClickUnit.PotentialMove p in cc.getPossibleMoves()) 
+					foreach (ClickUnit.PotentialMove p in selectedPlayer.getPossibleMoves()) 
 					{
-						if (p.t.Equals(this.getTileFromVector(new Vector2(x,y))))
+						if (p.t.Equals(this.getTileFromVector(new Vector2(x,y))) && tileOpen(this.getTileFromVector(new Vector2(x,y))) && moveMode)
 						{
 							//Debug.Log("X =" + x + "Y=" + y);
 							GameObject go = (GameObject)Instantiate (TileMove, new Vector3 (x, y, (float)-.5), Quaternion.identity);
@@ -160,9 +161,9 @@ public class Map : MonoBehaviour {
 							ct.movesTo = p.moves;
 						}
 					}
-						if (Distance ((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= cc.attackRange && Distance ((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) > 0 && checkEnemy (clickTiles [x, y])) {
+						if (Distance ((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= selectedPlayer.attackRange && Distance ((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) > 0 && checkEnemy (clickTiles [x, y]) && (!moveMode)) {
 							//Debug.Log("X =" + x + "Y=" + y);
-							GameObject go = (GameObject)Instantiate (TileAttack, new Vector3 (x, y, (float)-.5), Quaternion.identity);
+							GameObject go = (GameObject)Instantiate (TileAttack, new Vector3 (x, y, (float)-1.5), Quaternion.identity);
 							ClickTile ct = go.GetComponent<ClickTile> ();
 							ct.tileX = x;
 							ct.tileY = y;
@@ -282,4 +283,36 @@ public class Map : MonoBehaviour {
 	}
 
 	const float POSITION_GRID_RATIO = 1.0f;
+    public void attackObject(int x, int y)
+    {
+        if (!firstPlayerTurn)
+        {
+            for (int i = 0; i < player1Units.Length; i++)
+            {
+                if (player1Units[i].transform.position.x == x && player1Units[i].transform.position.y == y)
+                {
+                    attackedPlayer = player1Units[i].GetComponent<ClickUnit>();
+                    attackedPlayer.health -= selectedPlayer.damage;
+                }
+            }
+        }
+        if (firstPlayerTurn)
+        {
+            for (int i = 0; i < player2Units.Length; i++)
+            {
+
+                if (player2Units[i].transform.position.x == x && player2Units[i].transform.position.y == y)
+                {
+                    attackedPlayer = player2Units[i].GetComponent<ClickUnit>();
+                    attackedPlayer.health -= selectedPlayer.damage;
+                }
+            }
+        }
+        DestroyTiles();
+        if (attackedPlayer.health <= 0)
+        {
+            DestroyObject(attackedPlayer.player);
+            moraleChange(attackedPlayer);
+        }
+    }
 }
