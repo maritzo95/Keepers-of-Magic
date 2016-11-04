@@ -12,14 +12,11 @@ public class ClickUnit : MonoBehaviour
 	public double maxMoveDistance;
 	public double movesLeft;
     public double attackRange;
+	public ClickTile currentTile;
 	public Dictionary<string, int> terrainTolorances;
-	public Material _grass;
 	public static string grass;
-	public Material _mountain;
 	public static string mountain;
-	public Material _dirt;
 	public static string dirt;
-	public Material _water;
 	public static string water;
 
 	Vector2 position;
@@ -78,35 +75,40 @@ public class ClickUnit : MonoBehaviour
 
 			for (int i = 0, j = -1; i <= 1; j = (j == -1)? 1:0, i = (i == 1)? 100:i, i = (i == -1)? 1:i, i = (j == 0 && i == 0)? -1:i) 
 			{
-					int checkX = (int)space.x + i;
-					int checkY = (int)space.y + j;
-					Vector2 check = new Vector2 (checkX, checkY);
-					if (map.isOnBoard (check)) 
+				int checkX = (int)space.x + i;
+				int checkY = (int)space.y + j;
+				if (checkX == 1 && checkY == 2) {
+
+				}
+				Vector2 check = new Vector2 (checkX, checkY);
+				if (map.isOnBoard (check)) 
+				{
+					ClickTile cT = map.getTileFromVector (check);
+					if (this.terrainTolorances [cT.terrain.name] != 0) 
 					{
-						ClickTile cT = map.getTileFromVector (check);
-						if (this.terrainTolorances [cT.terrain.name] != null) 
+						int addedMoves = this.terrainTolorances[cT.terrain.name];
+						if((int)numMoves[n] + addedMoves <= this.movesLeft)
 						{
-							int addedMoves = this.terrainTolorances[cT.terrain.name];
-							if((int)numMoves[n] + addedMoves <= this.movesLeft)
+							int moveDistance = (int)numMoves [n] + addedMoves;
+							if (toCheckSurroundings.Contains (check))
 							{
-								int moveDistance = (int)numMoves [n] + addedMoves;
-								if (toCheckSurroundings.Contains (check))
+								for (int b = toCheckSurroundings.Count - 1; b >= 0; b--) 
 								{
-									for (int b = toCheckSurroundings.Count - 1; b >= 0; b--) 
+									if (toCheckSurroundings [b].Equals (check)) 
 									{
-										if (toCheckSurroundings [b].Equals (check)) 
+									if (moveDistance < (int)numMoves [b] && cT.IsOccupied() == false) 
 										{
-											if (moveDistance < (int)numMoves [b]) 
-											{
-												possible.Add (new PotentialMove (cT, moveDistance));
-												toCheckSurroundings.Add (check);
-												numMoves.Add (moveDistance);
-											}
-											b = -11;
+											possible.Add (new PotentialMove (cT, moveDistance));
+											toCheckSurroundings.Add (check);
+											numMoves.Add (moveDistance);
 										}
+										b = -11;
 									}
-								} 
-								else 
+								}
+							} 
+							else 
+							{
+								if (cT.IsOccupied() == false) 
 								{
 									possible.Add (new PotentialMove (cT, moveDistance));
 									toCheckSurroundings.Add (check);
@@ -114,7 +116,8 @@ public class ClickUnit : MonoBehaviour
 								}
 							}
 						}
-					}	
+					}
+				}	
 			}
 		}
 

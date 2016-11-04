@@ -8,6 +8,8 @@ public class ClickTile : MonoBehaviour {
     public GameObject Tile;
 	public Transform trans;
 	public Material terrain;
+	public ClickUnit containedUnit;
+	public int movesTo;
 
 	void Start()
 	{
@@ -20,7 +22,8 @@ public class ClickTile : MonoBehaviour {
         {
             if (Tile.tag.Equals("Move"))
             {
-                map.MoveUnitTo(tileX, tileY);
+				map.MoveUnitTo(tileX, tileY);
+				map.cc.movesLeft -= movesTo;
             }
             if (Tile.tag.Equals("Attack"))
             {
@@ -28,6 +31,16 @@ public class ClickTile : MonoBehaviour {
             }
         }
     }
+
+	public bool IsOccupied()
+	{
+		if (containedUnit != null) 
+		{
+			return true;
+		}
+
+		return false;
+	}
 
 }
 

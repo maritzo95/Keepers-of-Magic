@@ -82,13 +82,24 @@ public class Map : MonoBehaviour {
     }
     public void MoveUnitTo(int x, int y) {
      
+
             //checks  to see if it is selected
             if ((cc.selected && firstPlayerTurn && cc.tag.Equals("Player 1")) || (cc.selected && !firstPlayerTurn && cc.tag.Equals("Player 2")))
             {
                 //if the distance is within three tiles horizontally or two diagonally move it
                 if (Distance((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= 3)
+				{
                     //moves the selected unit. Note the -.75 is for the unit to appear on the grid. It does not move in the z direction
                     selectedUnit.transform.position = new Vector3(x, y, (float)-0.75);
+					Vector2 v = new Vector2 (x, y);
+					ClickTile cT = this.getTileFromVector (v);
+					if (cc.currentTile != null) 
+					{
+						cc.currentTile.containedUnit = null;
+					}
+					cc.currentTile = cT;
+					cT.containedUnit = cc;
+				}
             DestroyTiles();
             cc.selected = false;
             }
@@ -146,7 +157,7 @@ public class Map : MonoBehaviour {
 							ct.tileX = x;
 							ct.tileY = y;
 							ct.map = this;
-
+							ct.movesTo = p.moves;
 						}
 					}
 						if (Distance ((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) <= cc.attackRange && Distance ((int)selectedUnit.transform.position.x, (int)selectedUnit.transform.position.y, x, y) > 0 && checkEnemy (clickTiles [x, y])) {
