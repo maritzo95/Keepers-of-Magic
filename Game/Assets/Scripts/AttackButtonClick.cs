@@ -8,7 +8,5 @@ public class AttackButtonClick : MonoBehaviour
     public void Click()
     {
         map.moveMode = false;
-        map.DestroyTiles();
-        map.CreateTile();
     }
 }

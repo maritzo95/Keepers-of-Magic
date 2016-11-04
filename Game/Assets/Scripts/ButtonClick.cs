@@ -14,7 +14,6 @@ public class ButtonClick : MonoBehaviour {
             map.firstPlayerTurn = true;
         }
         map.DestroyTiles();
-        map.moveMode = true;
 
 		foreach (GameObject g in map.player1Units) 
 		{
