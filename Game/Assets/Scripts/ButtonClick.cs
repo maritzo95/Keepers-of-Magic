@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class ButtonClick : MonoBehaviour {
-    public Map map;
+    public Map map; 
 
     public void Click() {
         if (map.firstPlayerTurn)

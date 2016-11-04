@@ -7,7 +7,7 @@ public class ClickUnit : MonoBehaviour
     public bool selected;
     public GameObject player;
     public Map map;
-    public int health;
+    public int health; 
     public int damage;
     public int morale;
 	public double maxMoveDistance;

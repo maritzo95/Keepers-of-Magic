@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MoveButtonClick : MonoBehaviour
 {
-    public Map map;
+    public Map map; 
 
     public void Click()
     {

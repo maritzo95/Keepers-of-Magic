@@ -4,6 +4,6 @@ using System.Collections;
 public class TileType  {
 
     public string name;
-    public GameObject tileVisual;
+    public GameObject tileVisual; 
 
 }

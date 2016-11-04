@@ -6,7 +6,7 @@ public class ClickTile : MonoBehaviour {
     public int tileY;
     public Map map;
     public GameObject Tile;
-	public Transform trans;
+	public Transform trans; 
 	public Material terrain;
 	public ClickUnit containedUnit;
 	public int movesTo;

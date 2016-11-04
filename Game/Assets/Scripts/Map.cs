@@ -306,7 +306,7 @@ public class Map : MonoBehaviour {
                     attackedPlayer = player2Units[i].GetComponent<ClickUnit>();
                     attackedPlayer.health -= selectedPlayer.damage;
                 }
-            }
+             }
         }
         DestroyTiles();
         if (attackedPlayer.health <= 0)
