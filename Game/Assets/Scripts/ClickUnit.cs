@@ -15,10 +15,12 @@ public class ClickUnit : MonoBehaviour
     public double attackRange;
 	public ClickTile currentTile;
 	public Dictionary<string, int> terrainTolorances;
+    public PotentialMove potMove;
 	public static string grass;
 	public static string mountain;
 	public static string dirt;
 	public static string water;
+    public string name;
 
 	Vector2 position;
 
@@ -44,7 +46,7 @@ public class ClickUnit : MonoBehaviour
 		position = map.GetPositionFromTransform (this.transform);
         map.ChangeUnit(player);
 
-		print (map.getClickTiles().Length);
+		//print (map.getClickTiles().Length);
 
 		for (int i = 0; i < map.getSizeX(); i++) 
 		{
@@ -52,18 +54,18 @@ public class ClickUnit : MonoBehaviour
 			{
 				ClickTile t = map.getTileOnMap (i, j);
 				//within move distance
-				if (getPossibleMoves().Contains(t)) 
+				/*if (getPossibleMoves().Contains(t)) 
 				{
 					
-				}
+				}*/
 			}
 		}
     }
 
-	public ArrayList getPossibleMoves()
+	public List<PotentialMove> getPossibleMoves()
 	{
 
-		ArrayList possible = new ArrayList();
+		List<PotentialMove> possible = new List<PotentialMove>();
 		ArrayList toCheckSurroundings = new ArrayList ();
 		ArrayList numMoves = new ArrayList();
 
@@ -99,9 +101,21 @@ public class ClickUnit : MonoBehaviour
 									{
 									if (moveDistance < (int)numMoves [b] && cT.IsOccupied() == false) 
 										{
+                                            /*for (int q = 0; q < possible.Count; q++)
+                                            {
+                                    
+                                                if (possible[q].getCt().getX() == cT.getX() && possible[q].getCt().getY() == cT.getY())
+                                                {
+                                                    
+                                                }
+                                                else
+                                                {
+                                                    
+                                                }
+                                            }*/
 											possible.Add (new PotentialMove (cT, moveDistance));
-											toCheckSurroundings.Add (check);
-											numMoves.Add (moveDistance);
+											        toCheckSurroundings.Add (check);
+											        numMoves.Add (moveDistance);
 										}
 										b = -11;
 									}
@@ -135,6 +149,14 @@ public class ClickUnit : MonoBehaviour
 			this.t = t;
 			this.moves = moves;
 		}
+        public int getMoves()
+        {
+            return moves;
+        }
+        public ClickTile getCt()
+        {
+            return t;
+        }
 	}
 
 }

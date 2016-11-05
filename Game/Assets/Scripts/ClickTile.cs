@@ -31,6 +31,14 @@ public class ClickTile : MonoBehaviour {
             }
         }
     }
+    public int getX()
+    {
+        return tileX;
+    }
+    public int getY()
+    {
+        return tileY;
+    }
 
 	public bool IsOccupied()
 	{
